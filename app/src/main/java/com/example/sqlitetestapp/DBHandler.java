@@ -14,7 +14,6 @@ import java.io.File;
 
 public class DBHandler extends SQLiteOpenHelper {
 
-//    public static final String
 
 //    SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(new File("MyTestDB.db"), new SQLiteDatabase.CursorFactory));
 

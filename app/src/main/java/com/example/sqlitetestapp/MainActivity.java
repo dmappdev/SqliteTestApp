@@ -54,10 +54,11 @@ public class MainActivity extends AppCompatActivity {
             query = "CREATE TABLE IF NOT EXISTS " + tableName +
                     "(ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "FNAME TEXT NOT NULL," +
-                    "LNAME TEXT NOT NULL);";
+                    "LNAME TEXT NOT NULL," +
+                    "PHONE INTEGER," +
+                    "EMAIL TEXT);";
             database.execSQL(query);
-//           query = "INSERT INTO NAMES (ID, NAME) VALUES (null, 'ghi');";
-//           database.execSQL(query);
+
 
         } catch (Exception e) {
             txtDataView.setText(e.toString());
@@ -68,16 +69,12 @@ public class MainActivity extends AppCompatActivity {
         btnEnterData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                userData.add(editFName.getText().toString());
-//                userData.add(editLName.getText().toString());
-//                userData.add(editPhone.getText().toString());
-//                userData.add(editEmail.getText().toString());
-//                createDB();
-//                insertQuery(buildQuery(userData));
-//                txtDataView.setText(buildQuery(userData));
+
 
                 try {
-                    insertQuery(editFName.getText().toString(), editLName.getText().toString());
+                    insertQuery(editFName.getText().toString(), editLName.getText().toString(),
+                            Integer.parseInt(editPhone.getText().toString()),
+                            editEmail.getText().toString());
                 } catch (Exception e) {
                     showError(e);
                 }
@@ -87,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
         btnShowData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                userData.clear();
+                txtDataView.setText("");
                 try {
                     Cursor cursor = getAllData();
                     if (cursor.moveToFirst()) {
@@ -94,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
                             userData.add(cursor.getString(0));
                             userData.add(cursor.getString(1));
                             userData.add(cursor.getString(2));
+                            userData.add(cursor.getString(3));
+                            userData.add(cursor.getString(4));
                         } while (cursor.moveToNext());
                     }
 //                    String tmp = null;
@@ -123,8 +124,9 @@ public class MainActivity extends AppCompatActivity {
         return cursor;
     }
 
-    private void insertQuery(String fName, String lName) {
-        query = "INSERT INTO " + tableName + "(ID, FNAME, LNAME) VALUES (null, '" + fName + "', '" + lName + "');";
+    private void insertQuery(String fName, String lName, int phone, String email) {
+        query = "INSERT INTO " + tableName + "(ID, FNAME, LNAME, PHONE, EMAIL) VALUES (null, '" + fName + "', '" + lName +
+                "" + "', '" + phone + "', '" + email + "');";
         Toast.makeText(this, query, Toast.LENGTH_LONG).show();
         database.execSQL(query);
 
