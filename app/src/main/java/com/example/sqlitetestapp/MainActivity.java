@@ -26,10 +26,9 @@ public class MainActivity extends AppCompatActivity {
     private DBHandler dbHandler;
     private SQLiteDatabase database;
     private ArrayList<String> userData = new ArrayList<>();
-    private String dbName = "my_test.db";
-    private String tableName = "contacts";
-    private String[] dbData;
-    private Cursor cursor;
+    private final String dbName = "my_test.db";
+    private final String tableName = "contacts";
+    ArrayList<ClientData> clientDataList;
     String query = "";
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -45,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
         btnEnterData = findViewById(R.id.btn_enter_data);
         btnShowData = findViewById(R.id.btn_show_data);
         txtDataView = findViewById(R.id.txt_data_view);
-
-
 //DB
         try {
             dbHandler = new DBHandler(this, dbName, null, 3);
@@ -59,19 +56,13 @@ public class MainActivity extends AppCompatActivity {
                     "PHONE INTEGER," +
                     "EMAIL TEXT);";
             database.execSQL(query);
-
-
         } catch (Exception e) {
             txtDataView.setText(e.toString());
         }
-
-
 //Listeners
         btnEnterData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 try {
                     insertQuery(editFName.getText().toString(), editLName.getText().toString(),
                             Integer.parseInt(editPhone.getText().toString()),
@@ -81,57 +72,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
         btnShowData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-// Opening another activity
-
+// Opening view all data activity
                 Intent intent = new Intent(MainActivity.this, ViewAllData.class);
                 startActivity(intent);
-
-//                userData.clear();
-//                txtDataView.setText("");
-
-//                try {
-//                    Cursor cursor = getAllData();
-//                    if (cursor.moveToFirst()) {
-//                        do {
-//                            userData.add(cursor.getString(0));
-//                            userData.add(cursor.getString(1));
-//                            userData.add(cursor.getString(2));
-//                            userData.add(cursor.getString(3));
-//                            userData.add(cursor.getString(4));
-//                        } while (cursor.moveToNext());
-//                    }
-//                    for (String data : userData) {
-//                        txtDataView.append(data + " ");
-//                    }
-//
-//                } catch (Exception e) {
-//                    showError(e);
+//                fillClientData(getAllData());
+//                for (ClientData client:clientDataList) {
+//                    txtDataView.append(client.getfName() + " "+
+//                            client.getlName() + "\n");
 //                }
             }
         });
     }
-
-    private void showError(Exception e) {
-        txtDataView.setText(e.toString());
-    }
-
-//    private Cursor getAllData() {
-//        Cursor cursor = null;
-//        try {
-//            String query = "select * from " + tableName + ";";
-//            cursor = database.rawQuery(query, null);
-//        } catch (Exception e) {
-//            showError(e);
-//        }
-//        return cursor;
-//    }
-
     private void insertQuery(String fName, String lName, int phone, String email) {
         query = "INSERT INTO " + tableName + "(ID, FNAME, LNAME, PHONE, EMAIL) VALUES (null, '" + fName + "', '" + lName +
                 "" + "', '" + phone + "', '" + email + "');";
@@ -139,6 +93,45 @@ public class MainActivity extends AppCompatActivity {
         database.execSQL(query);
 
     }
+    private void showError(Exception e) {
+        txtDataView.setText(e.toString());
+    }
+    public Cursor getAllData() {
+        Cursor cursor = null;
+        try {
+            String query = "select * from " + tableName + ";";
+            cursor = database.rawQuery(query, null);
+        } catch (Exception e) {
+            showError(e);
+        }
+        return cursor;
+    }
+
+    public ArrayList<ClientData> fillClientData(Cursor cursor) {
+        clientDataList = new ArrayList<>();
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    ClientData clientData = new ClientData();
+                    clientData.setfName(cursor.getString(1));
+                    clientData.setlName(cursor.getString(2));
+                    clientData.setPhone(cursor.getInt(3));
+                    clientData.setEmail(cursor.getString(4));
+                    clientDataList.add(clientData);
+
+                } while (cursor.moveToNext());
+            }
+//            for (String data : mClientData) {
+//                txtDataView.append(data + " ");
+//            }
+
+        } catch (Exception e) {
+            showError(e);
+        }
+        return clientDataList;
+    }
+}
+
 
 //    private void createDB() {
 //        cursor = database.rawQuery("CREATE TABLE IF NOT EXISTS " + tableName + " (" +
@@ -160,5 +153,35 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //        return query;
 //    }
+//    private Cursor getAllData() {
+//        Cursor cursor = null;
+//        try {
+//            String query = "select * from " + tableName + ";";
+//            cursor = database.rawQuery(query, null);
+//        } catch (Exception e) {
+//            showError(e);
+//        }
+//        return cursor;
+//    }
+//                userData.clear();
+//                txtDataView.setText("");
 
-}
+//                try {
+//                    Cursor cursor = getAllData();
+//                    if (cursor.moveToFirst()) {
+//                        do {
+//                            userData.add(cursor.getString(0));
+//                            userData.add(cursor.getString(1));
+//                            userData.add(cursor.getString(2));
+//                            userData.add(cursor.getString(3));
+//                            userData.add(cursor.getString(4));
+//                        } while (cursor.moveToNext());
+//                    }
+//                    for (String data : userData) {
+//                        txtDataView.append(data + " ");
+//                    }
+//
+//                } catch (Exception e) {
+//                    showError(e);
+//                }
+
