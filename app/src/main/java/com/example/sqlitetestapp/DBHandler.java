@@ -21,14 +21,14 @@ public class DBHandler extends SQLiteOpenHelper {
         super(context, name, factory, version);
     }
 
-    public DBHandler(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version, @Nullable DatabaseErrorHandler errorHandler) {
-        super(context, name, factory, version, errorHandler);
-    }
+//    public DBHandler(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version, @Nullable DatabaseErrorHandler errorHandler) {
+//        super(context, name, factory, version, errorHandler);
+//    }
 
-    @RequiresApi(api = Build.VERSION_CODES.P)
-    public DBHandler(@Nullable Context context, @Nullable String name, int version, @NonNull SQLiteDatabase.OpenParams openParams) {
-        super(context, name, version, openParams);
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.P)
+//    public DBHandler(@Nullable Context context, @Nullable String name, int version, @NonNull SQLiteDatabase.OpenParams openParams) {
+//        super(context, name, version, openParams);
+//    }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {

@@ -3,6 +3,7 @@ package com.example.sqlitetestapp;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
@@ -84,27 +85,34 @@ public class MainActivity extends AppCompatActivity {
         btnShowData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                userData.clear();
-                txtDataView.setText("");
-                try {
-                    Cursor cursor = getAllData();
-                    if (cursor.moveToFirst()) {
-                        do {
-                            userData.add(cursor.getString(0));
-                            userData.add(cursor.getString(1));
-                            userData.add(cursor.getString(2));
-                            userData.add(cursor.getString(3));
-                            userData.add(cursor.getString(4));
-                        } while (cursor.moveToNext());
-                    }
-//                    String tmp = null;
-                    for (String data : userData) {
-                        txtDataView.append(data + " ");
-                    }
 
-                } catch (Exception e) {
-                    showError(e);
-                }
+
+// Opening another activity
+
+                Intent intent = new Intent(MainActivity.this, ViewAllData.class);
+                startActivity(intent);
+
+//                userData.clear();
+//                txtDataView.setText("");
+
+//                try {
+//                    Cursor cursor = getAllData();
+//                    if (cursor.moveToFirst()) {
+//                        do {
+//                            userData.add(cursor.getString(0));
+//                            userData.add(cursor.getString(1));
+//                            userData.add(cursor.getString(2));
+//                            userData.add(cursor.getString(3));
+//                            userData.add(cursor.getString(4));
+//                        } while (cursor.moveToNext());
+//                    }
+//                    for (String data : userData) {
+//                        txtDataView.append(data + " ");
+//                    }
+//
+//                } catch (Exception e) {
+//                    showError(e);
+//                }
             }
         });
     }
@@ -113,16 +121,16 @@ public class MainActivity extends AppCompatActivity {
         txtDataView.setText(e.toString());
     }
 
-    private Cursor getAllData() {
-        Cursor cursor = null;
-        try {
-            String query = "select * from " + tableName + ";";
-            cursor = database.rawQuery(query, null);
-        } catch (Exception e) {
-            showError(e);
-        }
-        return cursor;
-    }
+//    private Cursor getAllData() {
+//        Cursor cursor = null;
+//        try {
+//            String query = "select * from " + tableName + ";";
+//            cursor = database.rawQuery(query, null);
+//        } catch (Exception e) {
+//            showError(e);
+//        }
+//        return cursor;
+//    }
 
     private void insertQuery(String fName, String lName, int phone, String email) {
         query = "INSERT INTO " + tableName + "(ID, FNAME, LNAME, PHONE, EMAIL) VALUES (null, '" + fName + "', '" + lName +
